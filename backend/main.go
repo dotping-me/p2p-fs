@@ -9,11 +9,11 @@ import (
 
 // Serves frontend and handles websockets, file sharing and so on
 func main() {
-	hub := server.NewHub()
-	go hub.Run() // Runs asynchronously
 
+	// Maintains a collection of sessions
+	sm := server.NewSessionManager()
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		server.HandleWebsocket(hub, w, r)
+		server.HandleWebsocket(sm, w, r)
 	})
 
 	// Serving static frontend files

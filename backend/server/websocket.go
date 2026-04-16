@@ -8,46 +8,65 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type Client struct {
-	id   string
-	conn *websocket.Conn
-	send chan Message
-}
-
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-func HandleWebsocket(hub *Hub, w http.ResponseWriter, r *http.Request) {
+func HandleWebsocket(sm *SessionManager, w http.ResponseWriter, r *http.Request) {
+	conn, _ := upgrader.Upgrade(w, r, nil)
 
 	// Creates client
-	conn, _ := upgrader.Upgrade(w, r, nil)
 	client := &Client{
 		id:   utils.GenerateId(8),
 		conn: conn,
 		send: make(chan Message),
 	}
 
-	hub.connections[client.id] = client // Adds client to list of connections
-	log.Printf("New Client! ID: %s\n", client.id)
-
-	go readMessages(hub, client)
-	go write(client)
+	// Starts services
+	go readLoop(sm, client)
+	go writeLoop(client)
 }
 
-// Infinte loop to continue reading messages and broadcasting them
-func readMessages(hub *Hub, client *Client) {
+func readLoop(sm *SessionManager, client *Client) {
 	for {
 		var msg Message
-		if err := client.conn.ReadJSON(&msg); err != nil {
-			break
+
+		err := client.conn.ReadJSON(&msg)
+		if err != nil {
+			return
 		}
 
-		hub.broadcast <- msg
+		// Handles different types of messages
+		switch msg.Type {
+
+		// Client wants to join a session
+		// The Session ID is provided by the frontend
+
+		case "join":
+			sessionObj := sm.GetOrCreate(msg.Session)
+			if sessionObj.AddClient(client) {
+				client.session = sessionObj
+
+				log.Println("New Session:", msg.Session)
+				log.Println("New Client:", client.id)
+				log.Printf("%v\n", sm.sessions[msg.Session].clients)
+
+				break
+			}
+
+			log.Printf("Failed to add Client %s to Session %s\n", client.id, msg.Session)
+
+		default:
+			if client.session == nil {
+				return
+			}
+
+			client.session.channel <- msg
+		}
 	}
 }
 
-func write(client *Client) {
+func writeLoop(client *Client) {
 	for msg := range client.send {
 		client.conn.WriteJSON(msg)
 	}
