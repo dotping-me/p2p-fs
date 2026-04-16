@@ -1,3 +1,5 @@
+// This just exposes websockets for communication
+
 let socket = null;
 
 // It doesn't matter if backend IDs and frontend IDs do not match
@@ -24,4 +26,8 @@ export function sendSignal(data) {
     }
 
     socket.send(JSON.stringify({ ...data, from: clientId }));
+}
+
+export function getClientID() {
+    return clientId;
 }

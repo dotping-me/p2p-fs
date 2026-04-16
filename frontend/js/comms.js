@@ -1,25 +1,26 @@
-import { sendSignal } from "./signal.js";
+import { sendSignal } from "./ws.js";
 
 var peerConn = null;
 var channel = null;
 var onDataCallback = null;
+var currentSession = null;
 
 function setupChannel() {
     channel.onopen = () => console.log("Channel open!");
     channel.onmessage = (e) => onDataCallback(e.data);
 }
 
+export function setSession(id) {
+    currentSession = id;
+}
+
 export function newComms(onData) { // onData is a callback function
     onDataCallback = onData;
 
     peerConn = new RTCPeerConnection({
-        
-        /*
         iceServers: [
             { urls: "stun:stun.l.google.com:19302" }
         ]
-        */
-       
     });
 
     console.log(peerConn);
@@ -34,6 +35,7 @@ export function newComms(onData) { // onData is a callback function
         if (event.candidate) {
             sendSignal({
                 type: "candidate",
+                session: currentSession,
                 payload: JSON.stringify(event.candidate)
             });
         }
@@ -44,7 +46,9 @@ export function newComms(onData) { // onData is a callback function
     };
 }
 
-export function createOffer() {
+export function createOffer(sessionID) {
+    currentSession = sessionID;
+
     channel = peerConn.createDataChannel("file");
     setupChannel();
 
@@ -56,14 +60,15 @@ export function createOffer() {
         .then(offer => {
         sendSignal({
             type: "offer",
+            session: currentSession,
             payload: JSON.stringify(offer)
         });
     });
 }
 
 export async function handleSignal(msg) {
-
     switch (msg.type) {
+
     case "offer":
         await peerConn.setRemoteDescription(
             new RTCSessionDescription(JSON.parse(msg.payload))
@@ -74,6 +79,7 @@ export async function handleSignal(msg) {
 
         sendSignal({
             type: "answer",
+            session: msg.session,
             payload: JSON.stringify(answer)
         });
 

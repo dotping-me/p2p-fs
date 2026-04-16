@@ -23,6 +23,7 @@ export function sendFile(file) {
 
     let offset = 0;
     const reader = new FileReader();
+    alert("Sending data");
 
     // Recursively sends chunks of file
     reader.onload = (e) => {
@@ -53,6 +54,7 @@ export function handleIncomingData(data, onComplete) {
             expectedSize = meta.size;
         }
         
+        alert("Receiving data");
         return;
     }
 
