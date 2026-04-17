@@ -1,3 +1,4 @@
+import { getIceServers } from "./ice.js";
 import { sendSignal } from "./ws.js";
 
 var peerConn = null;
@@ -20,18 +21,7 @@ export function newComms(onData) { // onData is a callback function
     onDataCallback = onData;
 
     peerConn = new RTCPeerConnection({
-        iceServers: [
-
-            // STUN server
-            { urls: "stun:stun.l.google.com:19302" },
-
-            // TURN servers (Fallback for when STUN fails)
-
-            // Currently using Metered TURN with hardcoded creds for now
-            // TODO: Switch to using coturn (Self-host TURN)
-
-            
-        ]
+        iceServers: getIceServers()
     });
 
     console.log(peerConn);

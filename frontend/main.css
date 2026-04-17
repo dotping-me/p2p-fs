@@ -1,9 +1,356 @@
-:root {
-    
-}
-
 * {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+}
+
+
+.jetbrains {
+    font-family: "JetBrains Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.jetbrains-bold {
+    font-family: "JetBrains Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+}
+
+html, body {
+    width: 100vw;
+    height: 100vh;
+
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+}
+
+button {
+    transition: translate 0.125s, box-shadow 0.125s;
+    font-family: "JetBrains Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button:active {
+    translate: 0px 8px;
+    box-shadow: 0px 0px 4px #c4c4c4 !important;
+}
+
+#contentContainer {
+    width: 100%;
+    height: 100%;
+
+    padding: 32px 16px;
+}
+
+#sessionContainer {
+    width: 100%;
+    height: fit-content;
+    padding: 8px 16px;
+
+    flex-direction: column;
+    gap: 16px;
+}
+
+#sessionContainer > div {
+    width: 100%;
+}
+
+#sessionContainer,
+#sessionDisplayContainer {
+    display: flex;
+    align-items: center;
+}
+
+#leaveSessionBtn {
+    aspect-ratio: 1 / 1;
+    width: 48px;
+    margin-right: 16px;
+    display: inline;
+
+    border: none;
+    outline: none;
+
+    background-color: #f94144;
+    color: #eee;
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0px 8px #a12022;
+}
+
+#sessionContainer h1 {
+    display: inline;
+    width: fit-content;
+}
+
+#sessionActionsContainer {
+    margin-top: 12px;
+    display: flex;
+    gap: 20px;
+}
+
+#sessionActionsContainer button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    color: #eee;
+}
+
+#newSessionBtn {
+    background-color: #4c9a5c;
+    box-shadow: 0px 8px #315e39;
+}
+
+#joinSessionBtn {
+    background-color: #118ab2;
+    box-shadow: 0px 8px #0a6482;
+}
+
+hr {
+    margin: 32px;
+}
+
+#connectionContainer {
+    width: 100%;
+    padding: 0px 16px;
+}
+
+#peerContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#peerContainer > * {
+    flex: 1;
+    text-align: center;
+}
+
+#linkIcon {
+    height: 72px;
+    padding-top: 16px;
+    border: none;
+    outline: none;
+}
+
+#statusIcon {
+    aspect-ratio: 1 / 1;
+    height: 32px;
+    border: none;
+    outline: none;
+}
+
+#statusContainer {
+    display: flex;
+    align-items: center;
+    margin-top: 32px;
+    gap: 8px;
+}
+
+#connectBtn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    background-color: #118ab2;
+    color: #eee;
+    box-shadow: 0px 8px #0a6482;
+}
+
+#fileTransferContainer {
+    width: 100%;
+    padding: 0px 16px;
+}
+
+#fileInputWrapper {
+    width: 100%;
+    padding: 12px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    outline: none;
+    border: none;
+    background-color: #4c9a5c;
+    box-shadow: 0px 8px #315e39;
+    border-radius: 8px;
+}
+
+#fileInputWrapper > * {
+    color: #eee;
+}
+
+#fileIcon {
+    aspect-ratio: 1 / 1;
+    width: 100px;
+}
+
+#fileDisplayWrapper {
+    text-align: center;
+}
+
+.file-label {
+    width: 100%;
+}
+
+.file-label:hover {
+    cursor: pointer;
+}
+
+#fileActionsContainer {
+    margin-top: 24px;
+    display: flex;
+    gap: 20px;
+}
+
+#fileActionsContainer > * {
+    flex: 1;
+    padding: 12px;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    color: #eee;
+}
+
+#clearBtn {
+    background-color: #f94144;
+    box-shadow: 0px 8px #a12022;
+}
+
+#sendBtn {
+    background-color: #118ab2;
+    box-shadow: 0px 8px #0a6482;
+}
+
+#receivedFilesContainer {
+    width: 100%;
+    padding: 0px 16px;
+}
+
+#receivedFilesTitleWrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#receivedIcon {
+    aspect-ratio: 1 / 1;
+    width: 48px;
+    margin-right: 16px;
+    display: inline;
+}
+
+#receivedFiles {
+    width: 100%;
+    min-height: 200px;
+    margin-top: 16px;
+    padding: 12px;
+
+    background-color: #e5e5e5;
+    border-radius: 8px;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+}
+
+.file-item {
+    width: 100%;
+    aspect-ratio: 1 / 1; 
+}
+
+.file-item a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+
+    text-decoration: none;
+    color: #111;
+
+    background: white;
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.file-item a:hover {
+    cursor: pointer;
+}
+
+.file-icon:is(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.file-icon:not(img) {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.file-name {
+    font-size: 12px;
+    text-align: center;
+    word-break: break-word;
+}
+
+#downloadAllBtn {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px;
+
+    outline: none;
+    border: none;
+    border-radius: 8px;
+
+    background-color: #118ab2;
+    box-shadow: 0px 8px #0a6482;
+    color: #eee;
+}
+
+footer {
+    margin: 32px 0px; 
+    padding-bottom: 32px;
+    
+    width: 100%;
+    height: 10px;
+
+    display: grid;
+}
+
+footer a {
+    margin: auto;
+    font-size: 14px;
+    opacity: 0.5;
+    text-decoration: none;
+    color: #111;
+}
+
+footer a:hover {
+    text-decoration: underline;
+    opacity: 1;
 }

@@ -7,32 +7,132 @@
     <title>P2P File Sharing</title>
 
     <link rel="stylesheet" href="./main.css">
+
+    <!-- Google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <div id="contentContainer" class="jetbrains">
+        <div id="sessionContainer">
+            <div id="sessionDisplayContainer">
+                <button id="leaveSessionBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                    </svg>
+                </button>
 
-    <!--
-    <div id="contentContainer">
+                <h1>Session ID: <span id="session">---</span></h1>
+            </div>
 
+            <div id="sessionActionsContainer">
+                <button id="newSessionBtn">New Session</button>
+                <button id="joinSessionBtn">Join Session</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="connectionContainer">
+            <div id="peerContainer">
+                <h1><span id="client"></span> (You)</h1>
+                <svg id="linkIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                </svg>
+                <h1 id="peer">---</h1>
+            </div>
+
+            <div id="connectionActionsContainer">
+                <div id="statusContainer">
+                    <svg id="statusIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                    </svg>
+
+                    <p id="statusWrapper">Status: <span id="status">---</span></p>
+                </div>
+                <button id="connectBtn">Connect</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="fileTransferContainer">
+            <div id="sendContainer">
+                <div id="fileDisplayWrapper">
+                    <svg id="fileIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                    </svg>
+                    <div id="fileCount" class="file-count">No files selected</div>
+                </div>
+
+                <button id="fileInputWrapper" onclick="document.getElementById('fileInput').click();">
+                    <input type="file" id="fileInput" multiple hidden>
+                    <label for="fileInput" class="file-label">Choose files</label>
+                </button>
+
+                <div id="fileActionsContainer">
+                    <button id="clearBtn">Clear</button>
+                    <button id="sendBtn">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        
+        <div id="receivedFilesContainer">
+            <div id="receivedFilesTitleWrapper">
+                <svg id="receivedIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3" />
+                </svg>
+                <p>Received Files</p>
+            </div>
+
+            <div id="receivedFiles"></div>
+            <button id="downloadAllBtn" onclick="downloadAllFiles();">Download All</button>
+        </div>
+    
+        <footer>
+            <a href="https://github.com/dotping-me" target="_blank">My GitHub</a>
+        </footer>
     </div>
 
-    <dialog id="popupContainer"></dialog>
-    -->
-
-    <h1>Your ID: <span id="client"></span></h1>
-    <h1>Peer ID: <span id="peer"></span></h1>
-    <h1>Session: <span id="session"></span></h1>
-
-    <button id="newSession">New</button>
-    <button id="joinSession">Join</button>
-
-    <input type="file" id="fileInput" multiple>
-
-    <button id="connectBtn">Connect</button>
-    <button id="sendBtn">Send</button>
-
-    <div id="receivedFiles"></div>
-
     <script defer type="module" src="./js/index.js"></script>
+    <script defer>
+        // Just UI stuff...
+        const fileInput = document.getElementById("fileInput");
+        const fileCount = document.getElementById("fileCount");
+
+        fileInput.addEventListener("change", () => {
+            const count = fileInput.files.length;
+
+            if (count === 0) {
+                fileCount.textContent = "No files selected";
+            } else {
+                fileCount.textContent = `${count} file(s) selected`;
+            }
+        });
+
+        // Download all received files
+        function downloadAllFiles() {
+            const links = document.querySelectorAll("#receivedFiles a");
+
+            links.forEach((link, index) => {
+                setTimeout(() => {
+                    const url = link.href;
+                    const name = link.dataset.filename || `file_${index}`;
+
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = name;
+                    document.body.appendChild(a);
+
+                    a.click();
+                    document.body.removeChild(a);
+                }, index * 300); // Adds delay to bypass browser block
+            });
+        }
+    </script>
 </body>
 </html>
