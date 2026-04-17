@@ -20,11 +20,10 @@ export function setSession(id) {
 export function newComms(onData) { // onData is a callback function
     onDataCallback = onData;
 
+    // Sets up peer-to-peer connection
     peerConn = new RTCPeerConnection({
         iceServers: getIceServers()
     });
-
-    console.log(peerConn);
 
     // Sets behaviour on connection
     peerConn.ondatachannel = (event) => {
@@ -44,6 +43,7 @@ export function newComms(onData) { // onData is a callback function
 
     peerConn.onconnectionstatechange = () => {
         console.log("State:", peerConn.connectionState);
+        document.getElementById("status").innerText = peerConn.connectionState.trim();
     };
 }
 
@@ -119,4 +119,8 @@ export function getChannel() {
 
 export function getConnectedPeerID() {
     return connectedPeerID;
+}
+
+export function getPeerConnStatus() {
+    return peerConn.connectionState;
 }

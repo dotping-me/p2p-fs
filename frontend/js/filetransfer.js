@@ -1,6 +1,6 @@
 // TODO: Switch to streaming bits
 
-import { getChannel } from "./comms.js";
+import { getChannel, getPeerConnStatus } from "./comms.js";
 
 const CHUNK_SIZE = 16 * 1024;
 
@@ -19,11 +19,17 @@ export function sendFile(file) {
 }
 
 function processQueue() {
-    if (isSending || fileQueue.length === 0) return; // Transfer already in process
+    
+    // Transfer already in process or no more files to transfer
+    if (isSending || fileQueue.length === 0) {
+        document.getElementById("status").innerText = getPeerConnStatus();    
+        return;
+    }
 
     // Sends first file in queue
     const file = fileQueue.shift();
     isSending = true;
+    document.getElementById("status").innerText = "sending...";
 
     const channel = getChannel();
     if (!channel || channel.readyState !== "open") {
@@ -41,7 +47,7 @@ function processQueue() {
 
     let offset = 0;
     const reader = new FileReader();
-    alert("Sending data");
+    // alert("Sending data");
 
     // Recursively sends chunks of current file
     reader.onload = (e) => {
@@ -70,6 +76,8 @@ function processQueue() {
 
 // For receiving peer
 export function handleIncomingData(data, onComplete) {
+    document.getElementById("status").innerText = "receiving...";
+
     if (typeof data === "string") {
         const meta = JSON.parse(data);
 
@@ -80,7 +88,7 @@ export function handleIncomingData(data, onComplete) {
             receivedFilename = meta.name;
         }
         
-        alert("Receiving data");
+        // alert("Receiving data");
         return;
     }
 
@@ -90,6 +98,8 @@ export function handleIncomingData(data, onComplete) {
 
     // Assemble chunks if all chunks received
     if (receivedSize === expectedSize) {
+        document.getElementById("status").innerText = getPeerConnStatus();
+
         const blob = new Blob(buffers);
         onComplete(blob);
     }

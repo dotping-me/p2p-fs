@@ -354,3 +354,26 @@ footer a:hover {
     text-decoration: underline;
     opacity: 1;
 }
+
+/* Responsive UI for mobile screens */
+@media (max-width: 600px) {
+    #sessionContainer h1 {
+        font-size: 20px;
+    }
+
+    button {
+        font-size: 12px;
+    }
+
+    #connectionContainer h1 {
+        font-size: 16px;
+    }
+
+    #linkIcon {
+        height: 48px;
+    }
+
+    #statusIcon {
+        height: 24px;
+    }
+}

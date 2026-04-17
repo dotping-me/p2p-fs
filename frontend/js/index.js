@@ -28,6 +28,8 @@ function attachEventListeners() {
 
     document.getElementById("joinSessionBtn").onclick = () => {
         currentSession = prompt("Enter session ID:"); // TODO: Change to a form
+        currentSession = currentSession.trim()
+        
         sendSignal({
             type: "join",
             session: currentSession
