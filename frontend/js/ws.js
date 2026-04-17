@@ -8,7 +8,13 @@ const clientId = Math.random().toString(36).substring(2, 10);
 export function newSignal(onMessage) { // onMessage is a callback function
     
     // Creates websocket
-    socket = new WebSocket(`ws://${location.host}/ws`);
+    const protocol = location.protocol === "https:" ? "wss" : "ws";
+    socket = new WebSocket(`${protocol}://${location.host}/ws`);
+
+    socket.onopen = () => {
+        console.log("Successfully opened websocket");
+    };
+
     socket.onmessage = async (e) => {
         const msg = JSON.parse(e.data);
         if (msg.from === clientId) return;

@@ -13,6 +13,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func HandleWebsocket(sm *SessionManager, w http.ResponseWriter, r *http.Request) {
+	log.Println("Client reached /ws endpoint")
 	conn, _ := upgrader.Upgrade(w, r, nil)
 
 	// Creates client
@@ -21,6 +22,8 @@ func HandleWebsocket(sm *SessionManager, w http.ResponseWriter, r *http.Request)
 		conn: conn,
 		send: make(chan Message),
 	}
+
+	log.Printf("Client %s successfully connected!", client.id)
 
 	// Starts services
 	go readLoop(sm, client)
@@ -68,6 +71,7 @@ func readLoop(sm *SessionManager, client *Client) {
 
 func writeLoop(client *Client) {
 	for msg := range client.send {
+		log.Printf("Client %s writing message: %s!\n", client.id, msg.Type)
 		client.conn.WriteJSON(msg)
 	}
 }

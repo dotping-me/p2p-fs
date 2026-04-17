@@ -19,7 +19,20 @@ export function newComms(onData) { // onData is a callback function
 
     peerConn = new RTCPeerConnection({
         iceServers: [
-            { urls: "stun:stun.l.google.com:19302" }
+
+            // STUN server
+            { urls: "stun:stun.l.google.com:19302" },
+
+            // TURN servers (Fallback for when STUN fails)
+
+            // Currently using Metered TURN with hardcoded creds for now
+            // TODO: Switch to using coturn (Self-host TURN)
+
+            {
+                urls: "turn:YOUR_TURN_URL",
+                username: "YOUR_USERNAME",
+                credential: "YOUR_PASSWORD"
+            }
         ]
     });
 
