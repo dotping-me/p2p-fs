@@ -1,3 +1,5 @@
+// TODO: Switch to streaming bits
+
 import { getChannel } from "./comms.js";
 
 const CHUNK_SIZE = 16 * 1024;
@@ -5,16 +7,32 @@ const CHUNK_SIZE = 16 * 1024;
 let buffers = [];
 let expectedSize = 0;
 let receivedSize = 0;
+let receivedFilename = null;
+
+// To handle multiple files
+let fileQueue = [];
+let isSending = false;
 
 export function sendFile(file) {
-    const channel = getChannel();
-    console.log(channel);
+    fileQueue.push(file);
+    processQueue();
+}
 
+function processQueue() {
+    if (isSending || fileQueue.length === 0) return; // Transfer already in process
+
+    // Sends first file in queue
+    const file = fileQueue.shift();
+    isSending = true;
+
+    const channel = getChannel();
     if (!channel || channel.readyState !== "open") {
         alert("Not connected");
+        isSending = false;
         return;
     }
 
+    // Sends metadata
     channel.send(JSON.stringify({
         type: "meta",
         name: file.name,
@@ -25,13 +43,20 @@ export function sendFile(file) {
     const reader = new FileReader();
     alert("Sending data");
 
-    // Recursively sends chunks of file
+    // Recursively sends chunks of current file
     reader.onload = (e) => {
         channel.send(e.target.result);
         offset += e.target.result.byteLength;
 
+        // Sends next chunk
         if (offset < file.size) {
             readSlice(offset);
+        }
+
+        // End transfer or send next file
+        else {
+            isSending = false;
+            processQueue();
         }
     };
 
@@ -40,7 +65,7 @@ export function sendFile(file) {
         reader.readAsArrayBuffer(slice);
     }
 
-    readSlice(0);
+    readSlice(0); // Starts transfer
 }
 
 // For receiving peer
@@ -52,6 +77,7 @@ export function handleIncomingData(data, onComplete) {
             buffers = [];
             receivedSize = 0;
             expectedSize = meta.size;
+            receivedFilename = meta.name;
         }
         
         alert("Receiving data");
@@ -67,4 +93,8 @@ export function handleIncomingData(data, onComplete) {
         const blob = new Blob(buffers);
         onComplete(blob);
     }
+}
+
+export function getReceivedFilename() {
+    return receivedFilename;
 }

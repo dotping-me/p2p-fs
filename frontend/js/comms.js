@@ -5,6 +5,8 @@ var channel = null;
 var onDataCallback = null;
 var currentSession = null;
 
+var connectedPeerID = null;
+
 function setupChannel() {
     channel.onopen = () => console.log("Channel open!");
     channel.onmessage = (e) => onDataCallback(e.data);
@@ -28,11 +30,7 @@ export function newComms(onData) { // onData is a callback function
             // Currently using Metered TURN with hardcoded creds for now
             // TODO: Switch to using coturn (Self-host TURN)
 
-            {
-                urls: "turn:YOUR_TURN_URL",
-                username: "YOUR_USERNAME",
-                credential: "YOUR_PASSWORD"
-            }
+            
         ]
     });
 
@@ -80,6 +78,17 @@ export function createOffer(sessionID) {
 }
 
 export async function handleSignal(msg) {
+
+    // Locks first connection 
+    // TODO: Add proper auth
+
+    if (connectedPeerID == null) {
+        connectedPeerID = msg.from;
+        document.getElementById("peer").innerText = msg.from;
+    }
+
+    if (connectedPeerID != null && msg.from != connectedPeerID) return;
+
     switch (msg.type) {
 
     case "offer":
@@ -116,4 +125,8 @@ export async function handleSignal(msg) {
 
 export function getChannel() {
     return channel;
+}
+
+export function getConnectedPeerID() {
+    return connectedPeerID;
 }

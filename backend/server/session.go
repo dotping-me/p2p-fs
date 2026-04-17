@@ -1,5 +1,8 @@
 // TODO: Properly handle disconnections
 // TODO: Return error to frontend if failed to add client
+// TODO: Make the Client's ID (on the frontend) be the Session's ID
+// TODO: Do not create a session if id being searched is not found, return error
+// TODO: Add "Join" confirmation
 
 package server
 

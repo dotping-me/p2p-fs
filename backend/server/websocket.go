@@ -71,7 +71,7 @@ func readLoop(sm *SessionManager, client *Client) {
 
 func writeLoop(client *Client) {
 	for msg := range client.send {
-		log.Printf("Client %s writing message: %s!\n", client.id, msg.Type)
+		log.Printf("Client %s sending: [%s]!\n", client.id, msg.Type)
 		client.conn.WriteJSON(msg)
 	}
 }

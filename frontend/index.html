@@ -6,20 +6,32 @@
 
     <title>P2P File Sharing</title>
 
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="./main.css">
 </head>
 
 <body>
+
+    <!--
+    <div id="contentContainer">
+
+    </div>
+
+    <dialog id="popupContainer"></dialog>
+    -->
+
+    <h1>Your ID: <span id="client"></span></h1>
+    <h1>Peer ID: <span id="peer"></span></h1>
     <h1>Session: <span id="session"></span></h1>
+
     <button id="newSession">New</button>
     <button id="joinSession">Join</button>
 
-    <input type="file" id="fileInput">
+    <input type="file" id="fileInput" multiple>
 
     <button id="connectBtn">Connect</button>
     <button id="sendBtn">Send</button>
 
-    <img id="preview" />
+    <div id="receivedFiles"></div>
 
     <script defer type="module" src="./js/index.js"></script>
 </body>
